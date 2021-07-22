@@ -21,7 +21,7 @@ Download the jar file to your external modules folder (`mods`), which you point 
 Minimalist example:
 ```
 PROJ=HelloModules
-URL=https://github.com/BioLockJ-Dev-Team/HelloModules/releases/latest
+URL=https://github.com/BioLockJ-Dev-Team/HelloModules/releases/latest/download
 CONFIG=sayHello.config
 
 mkdir ${PROJ}_Example
@@ -37,14 +37,14 @@ Add the `#BioModule` line for the Hello_World module to any other pipeline.
 
 ### Build this module
 
-The build file references the BioLockJ project by assuming it is a peer folder.
+The build file references the BioLockJ project by assuming it is a peer folder.  If you don't want to use this relative-path-dependency, you can edit the build.xml file to reference the `$BLJ` variable instead, see commented lines in the build.xml. 
+
+Download the project as a peer to the BioLockJ folder.
 ```
 cd $BLJ
 cd ..
 wget https://github.com/BioLockJ-Dev-Team/HelloModules/archive/refs/heads/main.zip 
 unzip main.zip && rm main.zip && mv HelloModules-main HelloModules
-cd HelloModules
-ant
 ```
 
 Alternatively, use git:
@@ -52,6 +52,10 @@ Alternatively, use git:
 cd $BLJ
 cd ..
 git clone https://github.com/BioLockJ-Dev-Team/HelloModules.git
+```
+
+Build with ant:
+```
 cd HelloModules
 ant
 ```
