@@ -1,32 +1,53 @@
 # HelloModules
-An example of a BioLockJ module. 
 
-See the [documentation for the modules in this project](mkdocs/docs/index.md).
+## Before you begin
+
+This project is an example of a [BioLockJ](https://github.com/BioLockJ-Dev-Team/BioLockJ) module. 
+
+To build it, or even just to use it, you must have successfully installed and tested [BioLockJ](https://github.com/BioLockJ-Dev-Team/BioLockJ).
+```
+biolockj --version
+biolockj ${BLJ}/templates/myFirstPipeline/myFirstPipeline.properties
+```
+
+For more information about how to create BioLockJ modules and for other examples, see [the BioLockJ external modules resource repository](https://github.com/BioLockJ-Dev-Team/blj_ext_modules)
 
 ### Use this module
 
-Download the jar file to your external modules folder (`mods`).
+See the [userguide pages for the modules in this project](mkdocs/docs/index.md).
+
+Download the jar file to your external modules folder (`mods`), which you point to with the `--external-modules` argument.  In your config file, reference the Hello_World module in your module run order using the `#BioModule` keyword.
 
 Minimalist example:
 ```
-mkdir HelloModules_Example
-cd HelloModules_Example
-mkdir mods
-mkdir demo
-cd mods
-wget https://github.com/BioLockJ-Dev-Team/HelloModules/releases/download/0.0.0/HelloModules.jar
-cd ../demo
-wget https://raw.githubusercontent.com/BioLockJ-Dev-Team/HelloModules/main/demo/sayHello.config
-cd ..
-biolockj --external-modules ./mods ./demo/sayHello.config
-```
-The example above will create a minimalist pipeline demonstrating the use of the HelloModule module from the HelloModules project.  
+PROJ=HelloModules
+URL=https://github.com/BioLockJ-Dev-Team/HelloModules/releases/latest
+CONFIG=sayHello.config
 
-Add the `#BioModule` line for the HelloModules module to any other pipeline.
+mkdir ${PROJ}_Example
+cd ${PROJ}_Example
+wget $URL/${PROJ}.jar -P $PWD/mods
+wget $URL/demo.zip
+unzip demo.zip && rm demo.zip 
+biolockj --external-modules $PWD/mods ./demo/$CONFIG
+```
+The example above will create a minimalist pipeline demonstrating the use of the Hello_World module from the HelloModules project.  
+
+Add the `#BioModule` line for the Hello_World module to any other pipeline.
 
 ### Build this module
 
 The build file references the BioLockJ project by assuming it is a peer folder.
+```
+cd $BLJ
+cd ..
+wget https://github.com/BioLockJ-Dev-Team/HelloModules/archive/refs/heads/main.zip 
+unzip main.zip && rm main.zip && mv HelloModules-main HelloModules
+cd HelloModules
+ant
+```
+
+Alternatively, use git:
 ```
 cd $BLJ
 cd ..
@@ -35,11 +56,13 @@ cd HelloModules
 ant
 ```
 
+_If you encounter build difficulties, try using the docker build process below._
+
 Test that BioLockJ recognizes the module.
 ```
-biolockj-api listModules --external-modules ./dist
+biolockj-api listModules --external-modules $PWD/dist
 ```
-The output list should include "com.github.fodorlab.hello_world.HelloModules".
+The output list should include "com.github.fodorlab.hello_world.Hello_World".
 
 Run a demo pipeline.
 ```
@@ -47,3 +70,27 @@ biolockj --external-modules $PWD/dist ./demo/sayHello.config
 ```
 
 See more in the demo folder.
+
+### Build the project and its documentation using docker
+Confirm docker is running:
+```
+docker run --rm hello-world
+```
+
+Note: the code block below references this project directory as `$PWD`.
+```
+cd HelloModules
+```
+
+This is the standard build process for BioLockJ modules.
+```
+docker run --rm \
+  -v $PWD:/project \
+  -v $BLJ:/BioLockJ \
+  -e BLJ=/BioLockJ \
+  -w /project \
+  biolockjdevteam/build_and_deploy \
+  ant userguide
+```
+
+This process produces the jar file and the standardized [userguide pages](mkdocs/docs/index.md) for the modules in this project.
