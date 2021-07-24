@@ -37,24 +37,21 @@ Add the `#BioModule` line for the Hello_World module to any other pipeline.
 
 ### Build this module
 
-The build file references the BioLockJ project by assuming it is a peer folder.  If you don't want to use this relative-path-dependency, you can edit the build.xml file to reference the `$BLJ` variable instead, see commented lines in the build.xml. 
-
-Download the project as a peer to the BioLockJ folder.
+Download the source code:
 ```
-cd $BLJ
-cd ..
 wget https://github.com/BioLockJ-Dev-Team/HelloModules/archive/refs/heads/main.zip 
 unzip main.zip && rm main.zip && mv HelloModules-main HelloModules
 ```
 
 Alternatively, use git:
 ```
-cd $BLJ
-cd ..
-git clone https://github.com/BioLockJ-Dev-Team/HelloModules.git
+# git clone https://github.com/BioLockJ-Dev-Team/HelloModules.git
 ```
 
-Build with ant:
+Note: The build file references the BioLockJ project using the `$BLJ` variable.
+There is an option to use a relative path instead, see commented lines in the build.xml. 
+
+Run the `ant` command from the project root directory.
 ```
 cd HelloModules
 ant
